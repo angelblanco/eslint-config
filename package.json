@@ -1,0 +1,38 @@
+{
+  "name": "@angelblanco/eslint-config",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd",
+  "description": "Ángel Blanco's Eslint Config - based on @antfu/eslint-config",
+  "author": "Ángel Blanco",
+  "license": "MIT",
+  "homepage": "https://github.com/angelblanco/eslint-config#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelblanco/eslint-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/angelblanco/eslint-config/issues"
+  },
+  "keywords": [
+    "eslint",
+    "eslint-config"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "tsc --noEmit",
+    "build": "tsup index.ts --format cjs,esm --dts"
+  },
+  "dependencies": {
+    "@antfu/eslint-config": "^6.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.38.0",
+    "eslint-plugin-format": "^1.0.2",
+    "jiti": "^2.6.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  }
+}
