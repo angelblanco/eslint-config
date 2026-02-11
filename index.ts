@@ -28,7 +28,7 @@ function getDefaultOptions(): AntfuOptions {
 
 function getDefaultUserConfigs(): UserConfigs[] {
   return [
-     {
+    {
       files: ['**/*.vue'],
       rules: {
         'vue/block-order': ['error', {
@@ -36,13 +36,13 @@ function getDefaultUserConfigs(): UserConfigs[] {
         }],
       },
     },
-  ]
+  ];
 }
 
 export default function eslintConfig(applyUserOptions: ApplyUserOptionsFunction | null = null, applyUserConfigs: ApplyUserConfigsFunction | null = null): EslintConfig {
-  const options= applyUserOptions ? applyUserOptions(getDefaultOptions()) : getDefaultOptions();
+  const options = applyUserOptions ? applyUserOptions(getDefaultOptions()) : getDefaultOptions();
   const userConfig = applyUserConfigs ? applyUserConfigs(getDefaultUserConfigs()) : getDefaultUserConfigs();
-  
+
   return antfu(
     options,
     ...userConfig,

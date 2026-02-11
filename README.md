@@ -23,9 +23,9 @@ pnpm add -D eslint @angelblanco/eslint-config
 Create `eslint.config.js` in your project root:
 
 ```js
-import eslintConfig from '@angelblanco/eslint-config'
+import eslintConfig from '@angelblanco/eslint-config';
 
-export default eslintConfig()
+export default eslintConfig();
 ```
 
 ### Custom Options
@@ -33,7 +33,7 @@ export default eslintConfig()
 You can customize the default options by passing a function:
 
 ```js
-import eslintConfig from '@angelblanco/eslint-config'
+import eslintConfig from '@angelblanco/eslint-config';
 
 export default eslintConfig((defaultOptions) => {
   return {
@@ -42,8 +42,8 @@ export default eslintConfig((defaultOptions) => {
       ...defaultOptions.stylistic,
       semi: false, // Disable semicolons
     },
-  }
-})
+  };
+});
 ```
 
 ### Custom Rules
@@ -51,11 +51,11 @@ export default eslintConfig((defaultOptions) => {
 Add your own ESLint configs as a second parameter:
 
 ```js
-import eslintConfig from '@angelblanco/eslint-config'
+import eslintConfig from '@angelblanco/eslint-config';
 
 export default eslintConfig(
   null, // Use default options
-  (defaultConfigs) => [
+  defaultConfigs => [
     ...defaultConfigs,
     {
       rules: {
@@ -63,7 +63,7 @@ export default eslintConfig(
       },
     },
   ]
-)
+);
 ```
 
 ## Creating Your Own Config
@@ -82,14 +82,14 @@ Update `package.json` with your information:
 {
   "name": "@yourname/eslint-config",
   "author": "Your Name",
-  "repository": "yourname/eslint-config",
-  // ... other fields
+  "repository": "yourname/eslint-config"
 }
 ```
 
 ### 3. Modify the Configuration
 
 Edit `src/index.ts` to adjust:
+
 - Default options (TypeScript, Vue, formatters, etc.)
 - Stylistic preferences (semicolons, indentation, quotes)
 - Custom rules and overrides
@@ -120,9 +120,9 @@ pnpm add -D eslint @yourname/eslint-config
 ```
 
 ```js
-import eslintConfig from '@yourname/eslint-config'
+import eslintConfig from '@yourname/eslint-config';
 
-export default eslintConfig()
+export default eslintConfig();
 ```
 
 ## License
