@@ -111,54 +111,9 @@ export default eslintConfig(
 );
 ```
 
-## Development
+## Contributing
 
-### Testing an Unpublished Branch
-
-You can try a branch in another project before publishing it to npm by installing it straight from GitHub. The `prepare` script builds `dist` during the install, so nothing needs to be committed besides the source. The examples use a branch called `my-dev-branch`.
-
-#### 1. Push the branch
-
-```bash
-git push -u origin my-dev-branch
-```
-
-#### 2. Allow the build in the consumer project
-
-pnpm (>= 10.26) blocks the `prepare` script of git-hosted dependencies unless they are approved. Add the repository to `allowBuilds` in the consumer's `pnpm-workspace.yaml`:
-
-```yaml
-allowBuilds:
-  '@angelblanco/eslint-config@git+https://github.com/angelblanco/eslint-config.git': true
-```
-
-The repository URL (without `#<ref>`) approves any branch or commit of this repo, so it is set only once. Installs from npm never run `prepare`, so they don't need this entry.
-
-#### 3. Install the branch
-
-```bash
-pnpm add -D github:angelblanco/eslint-config#my-dev-branch
-```
-
-This sets the dependency in `package.json` to:
-
-```json
-{
-  "devDependencies": {
-    "@angelblanco/eslint-config": "github:angelblanco/eslint-config#my-dev-branch"
-  }
-}
-```
-
-After pushing new commits to the branch, run `pnpm update @angelblanco/eslint-config` in the consumer project to pick them up.
-
-#### 4. Go back to the published version
-
-Once the branch is merged and released, install the npm version again and remove the `allowBuilds` entry:
-
-```bash
-pnpm add -D @angelblanco/eslint-config@latest
-```
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) to learn how to open a pull request and how to test a branch in a real project before it is published to npm.
 
 ## Creating Your Own Config
 
