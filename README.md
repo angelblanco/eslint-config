@@ -9,6 +9,7 @@
 - Formatters enabled
 - Stylistic rules with semicolons and 2-space indentation
 - Custom Vue block order: template → script → style
+- Optional Tailwind CSS support via [eslint-plugin-tailwindcss](https://github.com/francoismassart/eslint-plugin-tailwindcss)
 
 ## Installation
 
@@ -45,6 +46,38 @@ export default eslintConfig((defaultOptions) => {
   };
 });
 ```
+
+### Tailwind CSS
+
+Tailwind support is disabled by default. Install the plugin (requires Tailwind CSS v4):
+
+```bash
+pnpm add -D eslint-plugin-tailwindcss
+```
+
+Then enable the `tailwind` option:
+
+```js
+import eslintConfig from '@angelblanco/eslint-config';
+
+export default eslintConfig(defaultOptions => ({
+  ...defaultOptions,
+  tailwind: true,
+}));
+```
+
+By default the plugin looks for your Tailwind entry CSS at `src/style.css`. Pass an object to set the path or any other [plugin setting](https://github.com/francoismassart/eslint-plugin-tailwindcss#settings):
+
+```js
+export default eslintConfig(defaultOptions => ({
+  ...defaultOptions,
+  tailwind: {
+    cssConfigPath: './src/assets/main.css',
+  },
+}));
+```
+
+Tailwind rules are registered before your custom configs, so you can override them with the second parameter.
 
 ### Custom Rules
 
