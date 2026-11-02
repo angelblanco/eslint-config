@@ -49,42 +49,30 @@ export default eslintConfig((defaultOptions) => {
 
 ### Tailwind CSS
 
-Tailwind support requires Tailwind CSS v4 and the plugin:
+Tailwind support is disabled by default. Install the plugin (requires Tailwind CSS v4):
 
 ```bash
 pnpm add -D eslint-plugin-tailwindcss
 ```
 
-It is **enabled automatically** when both `tailwindcss` and `eslint-plugin-tailwindcss` are installed and a CSS entry file importing tailwindcss (`@import "tailwindcss"`) is found in one of the common locations, relative to where ESLint runs:
-
-- `src/style.css`, `src/styles.css`, `src/index.css`, `src/main.css`, `src/app.css`
-- `src/assets/main.css`, `src/assets/css/main.css`, `src/styles/global.css`
-- `app/assets/css/main.css`, `assets/css/main.css` (Nuxt)
-- `src/app/globals.css`, `app/globals.css` (Next.js)
-- `resources/css/app.css` (Laravel)
-
-The detected path is available as `defaultOptions.tailwind`. To force it on or off, set the `tailwind` option:
+Then enable the `tailwind` option:
 
 ```js
 import eslintConfig from '@angelblanco/eslint-config';
 
 export default eslintConfig(defaultOptions => ({
   ...defaultOptions,
-  tailwind: false, // or true
+  tailwind: true,
 }));
 ```
 
-If your CSS entry lives somewhere else (e.g. a shared package in a monorepo), pass an object with the path or any other [plugin setting](https://github.com/francoismassart/eslint-plugin-tailwindcss#settings):
+By default the plugin looks for your Tailwind CSS entry file at `src/style.css`. To change it, or any other setting, pass an object instead of `true`. See the [plugin settings documentation](https://github.com/francoismassart/eslint-plugin-tailwindcss#settings) for all the available options:
 
 ```js
-import { resolve } from 'node:path';
-import eslintConfig from '@angelblanco/eslint-config';
-
 export default eslintConfig(defaultOptions => ({
   ...defaultOptions,
   tailwind: {
-    // Absolute path, so it works no matter which workspace ESLint runs from
-    cssConfigPath: resolve(import.meta.dirname, 'packages/tailwind/index.css'),
+    cssConfigPath: 'app/assets/css/main.css',
   },
 }));
 ```
