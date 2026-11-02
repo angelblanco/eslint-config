@@ -77,11 +77,14 @@ export default eslintConfig(defaultOptions => ({
 If your CSS entry lives somewhere else (e.g. a shared package in a monorepo), pass an object with the path or any other [plugin setting](https://github.com/francoismassart/eslint-plugin-tailwindcss#settings):
 
 ```js
+import { resolve } from 'node:path';
+import eslintConfig from '@angelblanco/eslint-config';
+
 export default eslintConfig(defaultOptions => ({
   ...defaultOptions,
   tailwind: {
     // Absolute path, so it works no matter which workspace ESLint runs from
-    cssConfigPath: `${import.meta.dirname}/packages/tailwind/index.css`,
+    cssConfigPath: resolve(import.meta.dirname, 'packages/tailwind/index.css'),
   },
 }));
 ```
