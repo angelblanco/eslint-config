@@ -35,7 +35,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "tsc --noEmit",
-    "build": "tsup index.ts --format cjs,esm --dts"
+    "build": "tsup index.ts --format cjs,esm --dts",
+    "prepare": "pnpm build"
   },
   "peerDependencies": {
     "eslint-plugin-tailwindcss": "^4.4.0"
