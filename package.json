@@ -47,9 +47,11 @@
     }
   },
   "dependencies": {
-    "@antfu/eslint-config": "^10.0.0"
+    "@antfu/eslint-config": "^10.0.0",
+    "local-pkg": "^1.2.1"
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
     "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-tailwindcss": "^4.4.0",

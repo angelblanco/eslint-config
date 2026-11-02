@@ -1,5 +1,30 @@
 import type { Linter } from 'eslint';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import process from 'node:process';
 import antfu, { ensurePackages, interopDefault } from '@antfu/eslint-config';
+import { isPackageExists } from 'local-pkg';
+
+/**
+ * Common locations of the CSS entry file that imports tailwindcss (Vite, Nuxt, Next.js, Laravel...).
+ */
+const TAILWIND_CSS_CANDIDATES = [
+  'src/style.css',
+  'src/styles.css',
+  'src/index.css',
+  'src/main.css',
+  'src/app.css',
+  'src/assets/main.css',
+  'src/assets/css/main.css',
+  'src/styles/global.css',
+  'src/app/globals.css',
+  'app/globals.css',
+  'app/assets/css/main.css',
+  'assets/css/main.css',
+  'resources/css/app.css',
+];
+
+const TAILWIND_IMPORT_REGEX = /@import\s+['"]tailwindcss/;
 
 /**
  * Settings for `eslint-plugin-tailwindcss`, declared here so the plugin stays an optional peer dependency.
@@ -10,7 +35,7 @@ interface TailwindOptions {
   /**
    * Path to the CSS file that imports tailwindcss.
    *
-   * @default 'src/style.css'
+   * @default auto-detected from common locations, falling back to the plugin default ('src/style.css')
    */
   cssConfigPath?: string;
   attributes?: string[];
@@ -26,7 +51,8 @@ type Options = AntfuOptions & {
   /**
    * Enable `eslint-plugin-tailwindcss`. Pass an object to customize the plugin settings.
    *
-   * @default false
+   * @default auto-detected: enabled when `tailwindcss` and `eslint-plugin-tailwindcss` are installed
+   * and a CSS entry file importing tailwindcss is found
    */
   tailwind?: boolean | TailwindOptions;
 };
@@ -43,12 +69,49 @@ type ApplyUserOptionsFunction = (defualtOptions: Options) => Options;
  */
 type ApplyUserConfigsFunction = (defaultUserConfigs: UserConfigs[]) => UserConfigs[];
 
+/**
+ * Looks for the CSS entry file that imports tailwindcss, relative to the current working directory.
+ */
+function findTailwindCss(): string | undefined {
+  return TAILWIND_CSS_CANDIDATES
+    .map(file => resolve(process.cwd(), file))
+    .find(file => existsSync(file) && TAILWIND_IMPORT_REGEX.test(readFileSync(file, 'utf8')));
+}
+
+function detectTailwind(): false | TailwindOptions {
+  if (!isPackageExists('tailwindcss') || !isPackageExists('eslint-plugin-tailwindcss')) {
+    return false;
+  }
+
+  const cssConfigPath = findTailwindCss();
+
+  return cssConfigPath
+    ? { cssConfigPath }
+    : false;
+}
+
+function resolveTailwindOptions(tailwind: true | TailwindOptions): TailwindOptions {
+  const options = tailwind === true
+    ? {}
+    : tailwind;
+
+  if (options.cssConfigPath) {
+    return options;
+  }
+
+  const cssConfigPath = findTailwindCss();
+
+  return cssConfigPath
+    ? { ...options, cssConfigPath }
+    : options;
+}
+
 function getDefaultOptions(): Options {
   return {
     typescript: true,
     vue: true,
     formatters: true,
-    tailwind: false,
+    tailwind: detectTailwind(),
     stylistic: {
       semi: true,
       indent: 2,
@@ -100,11 +163,7 @@ export default function eslintConfig(applyUserOptions: ApplyUserOptionsFunction 
   const pluginConfigs: UserConfigs[] = [];
 
   if (tailwind) {
-    const tailwindOptions = tailwind === true
-      ? {}
-      : tailwind;
-
-    pluginConfigs.push(tailwindConfigs(tailwindOptions));
+    pluginConfigs.push(tailwindConfigs(resolveTailwindOptions(tailwind)));
   }
 
   return antfu(

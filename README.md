@@ -49,30 +49,39 @@ export default eslintConfig((defaultOptions) => {
 
 ### Tailwind CSS
 
-Tailwind support is disabled by default. Install the plugin (requires Tailwind CSS v4):
+Tailwind support requires Tailwind CSS v4 and the plugin:
 
 ```bash
 pnpm add -D eslint-plugin-tailwindcss
 ```
 
-Then enable the `tailwind` option:
+It is **enabled automatically** when both `tailwindcss` and `eslint-plugin-tailwindcss` are installed and a CSS entry file importing tailwindcss (`@import "tailwindcss"`) is found in one of the common locations, relative to where ESLint runs:
+
+- `src/style.css`, `src/styles.css`, `src/index.css`, `src/main.css`, `src/app.css`
+- `src/assets/main.css`, `src/assets/css/main.css`, `src/styles/global.css`
+- `app/assets/css/main.css`, `assets/css/main.css` (Nuxt)
+- `src/app/globals.css`, `app/globals.css` (Next.js)
+- `resources/css/app.css` (Laravel)
+
+The detected path is available as `defaultOptions.tailwind`. To force it on or off, set the `tailwind` option:
 
 ```js
 import eslintConfig from '@angelblanco/eslint-config';
 
 export default eslintConfig(defaultOptions => ({
   ...defaultOptions,
-  tailwind: true,
+  tailwind: false, // or true
 }));
 ```
 
-By default the plugin looks for your Tailwind entry CSS at `src/style.css`. Pass an object to set the path or any other [plugin setting](https://github.com/francoismassart/eslint-plugin-tailwindcss#settings):
+If your CSS entry lives somewhere else (e.g. a shared package in a monorepo), pass an object with the path or any other [plugin setting](https://github.com/francoismassart/eslint-plugin-tailwindcss#settings):
 
 ```js
 export default eslintConfig(defaultOptions => ({
   ...defaultOptions,
   tailwind: {
-    cssConfigPath: './src/assets/main.css',
+    // Absolute path, so it works no matter which workspace ESLint runs from
+    cssConfigPath: `${import.meta.dirname}/packages/tailwind/index.css`,
   },
 }));
 ```
